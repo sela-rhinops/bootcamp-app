@@ -1,22 +1,31 @@
 "use strict";
 
 const dotenv = require( "dotenv" );
-const createServer = require( "./server" ).createServer;
+const Hapi = require( "@hapi/hapi" );
+
+const routes = require( "./routes" );
+
+const createServer = async () => {
+  const server = Hapi.server( {
+    port: process.env.PORT || 8080,
+    host: process.env.HOST || '0.0.0.0' // changed from localhost in order to make it work with the ip
+  } );
+
+  server.route( routes );
+
+  return server;
+};
 
 const init = async () => {
-	dotenv.config();
-	const config = {
-		port: process.env.PORT || 3000,
-		host: process.env.HOST || "localhost"
-	};
-	const server = await createServer( config );
-	await server.start();
-	console.log( "Server running on %s", server.info.uri );
+  dotenv.config();
+  const server = await createServer();
+  await server.start();
+  console.log( "Server running on %s", server.info.uri );
 };
 
 process.on( "unhandledRejection", ( err ) => {
-	console.log( err );
-	process.exit( 1 );
+  console.log( err );
+  process.exit( 1 );
 } );
 
 init();
