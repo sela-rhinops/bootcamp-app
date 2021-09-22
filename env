@@ -1,0 +1,16 @@
+# Node Weight Tracker
+NODE_ENV=development
+HOST_URL=http://34.147.89.156:8080
+COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+
+# Okta configuration
+OKTA_ORG_URL=https://dev-97948649.okta.com
+OKTA_CLIENT_ID=0oa1y54is7Akku0Wl5d7
+OKTA_CLIENT_SECRET=RftCqbcfIyjz4PVO7O64watW-6PI0DHLLg9rXHCJ
+
+# Postgres configuration
+PGHOST=10.164.15.204
+PGUSERNAME=postgres
+PGDATABASE=postgres
+PGPASSWORD=root
+PGPORT=5432
