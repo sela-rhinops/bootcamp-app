@@ -4,7 +4,7 @@ const home = {
   method: "GET",
   path: "/",
   handler: ( request, h ) => {
-    return "hello world!";
+    return "HELLO MOSHE ROSENBLUM!";
   }
 };
 
