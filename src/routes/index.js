@@ -3,6 +3,8 @@
 const path = require( "path" );
 
 const auth = require( "./auth" );
+const api = require( "./api" );
+const measurements = require( "./measurements" );
 
 const home = {
   method: "GET",
@@ -21,7 +23,7 @@ const staticAssets = {
   method: "GET",
   path: "/assets/{param*}",
   handler: {
-    directory:{
+    directory:{ 
       path: path.join( __dirname, "..", "assets" )
     }
   },
@@ -41,4 +43,4 @@ module.exports = [
   home,
   staticAssets,
   error404
-].concat( auth );
+].concat( api, auth, measurements );
