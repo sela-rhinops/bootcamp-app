@@ -8,7 +8,7 @@ const plugins = require( "./plugins" );
 const createServer = async () => {
   const server = Hapi.server( {
     port: process.env.PORT || 8080,
-    host: process.env.HOST || '0.0.0.0' // changed from localhost in order to make it work with the ip
+    host: process.env.HOST || '34.90.48.244' // changed from localhost in order to make it work with the ip
   } );
   //server.register( plugins );
   await plugins.register( server );
