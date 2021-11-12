@@ -7,4 +7,6 @@ EXPOSE 8080
 
 # Install dependencies
 RUN npm install 
+RUN npm run initdb
+
 CMD npm run dev
