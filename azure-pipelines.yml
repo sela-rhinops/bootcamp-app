@@ -62,7 +62,7 @@ stages:
             - task: CmdLine@2
               displayName: Pull image
               inputs:
-                script: 'docker pull $(containerRegistry)/$(imageRepository):$(tag)'
+                script: 'sudo docker pull $(containerRegistry)/$(imageRepository):$(tag)'
             - task: Bash@3
               displayName:  Run Container
               inputs:
