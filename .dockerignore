@@ -1,7 +1,7 @@
 **/Dockerfile
 **/Dockerfile.archive
 /*.yml
-**/node_modules/
+# **/node_modules/
 **/.dockerignore
 **/.git
 **/.gitignore
