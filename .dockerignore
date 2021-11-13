@@ -1,15 +1,15 @@
-# /Dockerfile
-# /Dockerfile.archive
-# /docker-compose.yml
-# /node_modules/
-# /.dockerignore
-# /.git
-# /.gitignore
-# /README.md
-# /LICENSE
-# /.vscode
-# /npm-debug.log
-# /coverage
-# /.env
-# /.editorconfig
-# **/dist
+**/Dockerfile
+**/Dockerfile.archive
+/*.yml
+**/node_modules/
+**/.dockerignore
+**/.git
+**/.gitignore
+**/README.md
+**/LICENSE
+**/.vscode
+**/npm-debug.log
+**/coverage
+**/.env
+**/.editorconfig
+**/dist
