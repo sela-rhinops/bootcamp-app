@@ -1,6 +1,6 @@
 trigger:
-  - master
-  # - feature/*
+  # - master
+  - feature/*
   
 resources:
   - repo: self
