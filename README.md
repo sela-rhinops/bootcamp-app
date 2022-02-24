@@ -13,7 +13,7 @@ This sample application demonstrates the following technologies.
 
 **Requirements:**
 
-* [Node.js](https://nodejs.org/) 12.x or higher
+* [Node.js](https://nodejs.org/) 14.x
 * [PostgreSQL](https://www.postgresql.org/) (can be installed locally using Docker)
 * [Free Okta developer account](https://developer.okta.com/) for account registration, login
 

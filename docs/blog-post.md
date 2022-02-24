@@ -10,7 +10,7 @@ In this tutorial, you are going to create a modern Node.js application to keep t
 
 Before we begin, let's first check some requirements.
 
-* [Node.js](https://nodejs.org/) version 12.x or higher.
+* [Node.js](https://nodejs.org/) version 14.x
 * [A PostgreSQL database](https://www.postgresql.org/). If you don't already have PostgreSQL, you can install it using Docker. More details on this later in the tutorial!
 * [A free Okta developer account](https://developer.okta.com/) for account registration, login, and security.
 
