@@ -3,10 +3,9 @@
 <p>Welcome to the <b>Node.js Weight Tracker</b> sample project!</p>
 
 <% if ( auth.isAnonymous ) { %>
-	<p><a href="/login">Click here</a> to login or create an account.</p>
+  <p><a href="/login">Click here</a> to login or create an account.</p>
 <% } %>
 
 <% if ( auth.isAuthenticated ) { %>
-	<p><a href="/add">Add</a> a weight measurement or <a href="/list">view</a> your progress.</p>
+  <p><a href="/add">Add</a> a weight measurement or <a href="/list">view</a> your progress.</p>
 <% } %>
-
