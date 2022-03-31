@@ -1,14 +1,11 @@
 FROM node:14
 
 # Create app directory
-WORKDIR /usr/src/app
-# Copy both of the package.json files (*)
-COPY package*.json ./
-# Install app dependencies
+WORKDIR /home/ubuntu/bootcamp-app
+# Copy web files
+COPY . .
+# Install npm dependencies
 RUN npm install
-# Bundle app source
-# Copy folder contents
-COPY .. .
 # initializing npm
 RUN npm init -y
 # initializing the database part of the env file
