@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-apline
 
 # Create app directory
 WORKDIR /home/ubuntu/bootcamp-app
