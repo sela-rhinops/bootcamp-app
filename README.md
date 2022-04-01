@@ -2,15 +2,16 @@
 
 The associated blog post goes into more detail on how to configure your Okta account.
 ##Postgres 
-install docker.io on your machine and run the following command to set postgreSQL using docker
-   `docker run  -d --name measurements --restart always -p 5432:5432 -e 'POSTGRES_PASSWORD=p@ssw0rd42' postgres`
-</br>**Note:Added the restart-always option to keep the db running. <br>**
-Change the postgreSQL server to a managed sql server on azure.
-
-## Steps to recreate Environment
-Note: These steps work in ubuntu v20.04
-
-### **1. Creating the .env file (create it in the application working dir)**
+installation with docker.</br>
+```
+sudo apt update
+sudo apt install docker.io
+docker run  -d --name measurements --restart always -p 5432:5432 -e 'POSTGRES_PASSWORD=e*4mple1234' postgres
+```
+**Note:Added the restart-always option to keep the db running. <br>**
+Changed the postgreSQL server to a managed sql server on azure. Created with Terraform as mentioned below.
+## Steps to recreate Environments:
+## **1. Creating the .env file (create it in the application working dir)**
     # Host configuration
     PORT=8080
     HOST=localhost
@@ -39,7 +40,7 @@ paste them into your .env file to replace {yourOrgUrl}, {yourClientId} and {your
 **Note: To create your okta web application follow the steps in [here](https://github.com/Shossi/bootcamp-app/blob/master/docs/blog-post.md)**
 --------
 
-### **2. Building the docker image**
+## **2. Building the docker image**
 The dockerfile contains all the needed commands to run the application
 ```
 docker build -tag "tag" .
@@ -50,7 +51,7 @@ docker login
 docker push 'tag'
 ```
 ------------------
-### **3. Ansible**
+## **3. Ansible**
 Installing Ansible: 
 ```
 sudo apt update
@@ -67,7 +68,8 @@ Running the playbook
 ```
 ansible-playbook 'name'.yaml -i inv.ini
 ```
-### 4.Infrastructure
+---------------
+## 4.Infrastructure
 Infrastructure is created with [terraform](https://github.com/Shossi/Terraform-Weight), and it contains the following: </br>
 
 ### **prod:**</br>
@@ -82,3 +84,23 @@ Infrastructure is created with [terraform](https://github.com/Shossi/Terraform-W
 - another virtual machine used as a master node for ansible
 
 Note: Difference between the environments is the number of instances.
+
+Commands to create the environment: </br>
+Creating the workspaces:
+```
+terraform workspace new prod
+terraform workspace new staging 
+```
+Creating the Production environment:
+```
+terraform workspace select prod
+terraform plan -out prod.plan -var-file prod.tfvars
+terraform apply ./prod.plan
+```
+Creating the Staging environment:
+```
+terraform workspace select staging
+terraform plan -out staging.plan -var-file staging.tfvars
+terraform apply ./staging.plan
+```
+
