@@ -29,8 +29,5 @@
         name: joeyhd/staging-weight
         source: pull
 
-    - name:
-      shell: "docker stop $(docker ps -a -q)"
-
     - name: Start weight app container
       shell: "docker run -d --restart=always -p 8080:8080 joeyhd/staging-weight "
