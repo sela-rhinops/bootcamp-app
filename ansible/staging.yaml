@@ -30,4 +30,4 @@
         source: pull
 
     - name: Start weight app container
-      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/staging-weight "
+      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/staging-weight:latest "

@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Log into DockerHub
+      docker_login:
+        username: {{docker_username}}
+        password: {{docker_password}}
+    - name: Build an image and push it to a private repo
+      community.docker.docker_image:
+        build:
+          path: /home/ubuntu/bootcamp-app
+        name: joeyhd/staging-weight
+        tag: latest
+        push: yes
+        source: build
