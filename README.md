@@ -14,7 +14,7 @@ Changed the postgreSQL server to a managed sql server on azure. Created with Ter
 ## **1. Creating the .env file (create it in the application working dir)**
     # Host configuration
     PORT=8080
-    HOST=localhost
+    HOST=0.0.0.0
 ------
     # Postgres configuration 
     PGHOST=localhost
@@ -27,7 +27,7 @@ Changed the postgreSQL server to a managed sql server on azure. Created with Ter
 
 -----
     # Chang localhost to your machine's IP address
-    HOST_URL=http://localhost:8080
+    HOST_URL=http://{{ loadbalancer_ip }}:8080
     COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
     NODE_ENV=development
     
