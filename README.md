@@ -1,4 +1,4 @@
-# Node.js Weight Tracker Application
+# Node.js Weight Tracker Application.
 
 The associated blog post goes into more detail on how to configure your Okta account.
 ##Postgres 
