@@ -2,6 +2,7 @@
 - hosts: servers
   become: yes
   gather_facts: yes
+  vars_files: inv.ini
   tasks:
     - name: Run the equivalent of "apt-get update" as a separate step
       apt:
