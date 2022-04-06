@@ -29,6 +29,9 @@
       docker_image:
         name: joeyhd/{{ env }}-weight
         source: pull
+        
+    - name: Stop running container if present
+      shell: docker stop $(docker ps)
 
     - name: Start weight app container
       shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:latest "
