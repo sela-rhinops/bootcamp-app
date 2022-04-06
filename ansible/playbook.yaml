@@ -27,8 +27,8 @@
 
     - name: Pull an image
       docker_image:
-        name: joeyhd/prod-weight
+        name: joeyhd/{{ env }}-weight
         source: pull
 
     - name: Start weight app container
-      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/prod-weight:latest "
+      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:latest "
