@@ -9,8 +9,8 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
-
+- group: staging
+- group: prod
 stages:
 - stage: Build
   displayName: Build image
@@ -18,12 +18,41 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: ubuntu-latest      
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    - bash: |
+       sudo chmod 666 /var/run/docker.sock
+       echo "# Host configuration
+       PORT=8080
+       HOST=0.0.0.0
+       # Postgres configuration
+       PGHOST=$(env)-bootcamp-psqlflexibleserver.postgres.database.azure.com
+       PGUSERNAME=psqladmin
+       PGDATABASE=postgres
+       PGPASSWORD=$($(env)_postgres_pass)
+       PGPORT=5432
+       
+       HOST_URL=http://$($(env)_lb_ip):8080
+       COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+       NODE_ENV=development
+       
+       # Okta configuration
+       OKTA_ORG_URL=https://dev-79904368.okta.com
+       OKTA_CLIENT_ID=$($(env)_okta_id)
+       OKTA_CLIENT_SECRET=$($(env)_okta_secret)" > ./.env
+      displayName: 'Create .env file '
+    - task: Docker@0
+      displayName: 'Build an image'
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
+        defaultContext: false
+        imageName: 'joeyhd/$(env)-weight:$(Build.BuildId)'
+    - task: Docker@0
+      displayName: 'Push an image'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        action: 'Push an image'
+        imageName: 'joeyhd/$(env)-weight:$(Build.BuildId)'
