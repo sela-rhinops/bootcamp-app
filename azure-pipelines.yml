@@ -18,7 +18,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: staging      
+      staging: staging      
     steps:
     
     - checkout: self
