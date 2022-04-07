@@ -8,11 +8,10 @@ trigger:
 resources:
 - repo: self
 
-variables:
-- group: staging
-- group: prod
 stages:
 - stage: Build
+  variables:
+  - group: staging
   displayName: Build image
   jobs:
   - job: Build
@@ -20,7 +19,6 @@ stages:
     pool:
       name: staging      
     steps:
-    
     - checkout: self
       clean: true
 
