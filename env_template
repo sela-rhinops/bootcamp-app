@@ -1,0 +1,18 @@
+# Host configuration
+PORT=8080
+HOST=0.0.0.0
+# Postgres configuration
+PGHOST=$(env)-bootcamp-psqlflexibleserver.postgres.database.azure.com
+PGUSERNAME=psqladmin
+PGDATABASE=postgres
+PGPASSWORD=$($(env)_postgres_pass)
+PGPORT=5432
+
+HOST_URL=http://$($(env)_lb_ip):8080
+COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+NODE_ENV=development
+
+# Okta configuration
+OKTA_ORG_URL=https://dev-79904368.okta.com
+OKTA_CLIENT_ID=$($(env)_okta_id)
+OKTA_CLIENT_SECRET=$($(env)_okta_secret)
