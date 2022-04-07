@@ -18,7 +18,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      staging: staging      
+      name: staging      
     steps:
     
     - checkout: self
