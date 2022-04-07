@@ -18,8 +18,12 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest      
+      vmImage: staging      
     steps:
+    
+    - checkout: self
+      clean: true
+
     - bash: |
        sudo chmod 666 /var/run/docker.sock
        echo "# Host configuration
