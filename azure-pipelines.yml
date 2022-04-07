@@ -23,6 +23,9 @@ stages:
       clean: true
 
     - bash: |
+       echo $(env)
+       echo $(staging_lb_ip)
+       echo $($(env)_lb_ip)
        sudo chmod 666 /var/run/docker.sock
        echo "# Host configuration
        PORT=8080
