@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 stages:
-- stage: Build Dockerfile (Staging)
+- stage: Build Dockerfile Staging
   variables:
   - group: staging
   displayName: Build image
@@ -42,9 +42,9 @@ stages:
        OKTA_ORG_URL=https://dev-79904368.okta.com
        OKTA_CLIENT_ID=$(staging_okta_id)
        OKTA_CLIENT_SECRET=$(staging_okta_secret)" > ./.env
-      displayName: 'Create .env file (Staging)'
+      displayName: 'Create .env file Staging'
     - task: Docker@0
-      displayName: 'Build an image (Staging)'
+      displayName: 'Build an image Staging'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
@@ -52,7 +52,7 @@ stages:
         defaultContext: false
         imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
     - task: Docker@0
-      displayName: 'Push an image (Staging)'
+      displayName: 'Push an image Staging'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
@@ -60,10 +60,10 @@ stages:
         imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
 
 
-- stage: Build Dockerfile (Prod)
+- stage: Build Dockerfile Prod
   variables:
   - group: prod
-  displayName: Build image (Prod)
+  displayName: Build image Prod
   jobs:
   - job: Build
     displayName: Build
@@ -92,9 +92,9 @@ stages:
        OKTA_ORG_URL=https://dev-79904368.okta.com
        OKTA_CLIENT_ID=$(prod_okta_id)
        OKTA_CLIENT_SECRET=$(prod_okta_secret)" > ./.env
-      displayName: 'Create .env file (Prod)'
+      displayName: 'Create .env file Prod'
     - task: Docker@0
-      displayName: 'Build an image (Prod)'
+      displayName: 'Build an image Prod'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
@@ -102,7 +102,7 @@ stages:
         defaultContext: false
         imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
     - task: Docker@0
-      displayName: 'Push an image (Prod)'
+      displayName: 'Push an image Prod'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
