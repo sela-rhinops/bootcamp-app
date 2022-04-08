@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 stages:
-- stage: Build
+- stage: Build Dockerfile (Staging)
   variables:
   - group: staging
   displayName: Build image
@@ -20,45 +20,91 @@ stages:
       name: staging      
     steps:
     - checkout: self
-      clean: true
+      #clean: true
 
     - bash: |
-       echo '$($(env)_lb_ip)'
-       echo "$($(env)_lb_ip)"
-       echo "$("$(env)_lb_ip")"
-       
        sudo chmod 666 /var/run/docker.sock
        echo "# Host configuration
        PORT=8080
        HOST=0.0.0.0
        # Postgres configuration
-       PGHOST=$(env)-bootcamp-psqlflexibleserver.postgres.database.azure.com
+       PGHOST=staging-bootcamp-psqlflexibleserver.postgres.database.azure.com
        PGUSERNAME=psqladmin
        PGDATABASE=postgres
-       PGPASSWORD=$($(env)_postgres_pass)
+       PGPASSWORD=$(staging_postgres_pass)
        PGPORT=5432
        
-       HOST_URL=http://$($(env)_lb_ip):8080
+       HOST_URL=http://$(staging_lb_ip):8080
        COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
        NODE_ENV=development
        
        # Okta configuration
        OKTA_ORG_URL=https://dev-79904368.okta.com
-       OKTA_CLIENT_ID=$($(env)_okta_id)
-       OKTA_CLIENT_SECRET=$($(env)_okta_secret)" > ./.env
-      displayName: 'Create .env file '
+       OKTA_CLIENT_ID=$(staging_okta_id)
+       OKTA_CLIENT_SECRET=$(staging_okta_secret)" > ./.env
+      displayName: 'Create .env file (Staging)'
     - task: Docker@0
-      displayName: 'Build an image'
+      displayName: 'Build an image (Staging)'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
         dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
         defaultContext: false
-        imageName: 'joeyhd/$(env)-weight:$(Build.BuildId)'
+        imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
     - task: Docker@0
-      displayName: 'Push an image'
+      displayName: 'Push an image (Staging)'
       inputs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
         action: 'Push an image'
-        imageName: 'joeyhd/$(env)-weight:$(Build.BuildId)'
+        imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
+
+
+- stage: Build Dockerfile (Prod)
+  variables:
+  - group: prod
+  displayName: Build image (Prod)
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: prod     
+    steps:
+    - checkout: self
+      #clean: true
+    - bash: |
+       sudo chmod 666 /var/run/docker.sock
+       echo "# Host configuration
+       PORT=8080
+       HOST=0.0.0.0
+       # Postgres configuration
+       PGHOST=prod-bootcamp-psqlflexibleserver.postgres.database.azure.com
+       PGUSERNAME=psqladmin
+       PGDATABASE=postgres
+       PGPASSWORD=$(staging_postgres_pass)
+       PGPORT=5432
+       
+       HOST_URL=http://$(prod_lb_ip):8080
+       COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+       NODE_ENV=development
+       
+       # Okta configuration
+       OKTA_ORG_URL=https://dev-79904368.okta.com
+       OKTA_CLIENT_ID=$(prod_okta_id)
+       OKTA_CLIENT_SECRET=$(prod_okta_secret)" > ./.env
+      displayName: 'Create .env file (Prod)'
+    - task: Docker@0
+      displayName: 'Build an image (Prod)'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
+        defaultContext: false
+        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
+    - task: Docker@0
+      displayName: 'Push an image (Prod)'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        action: 'Push an image'
+        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
