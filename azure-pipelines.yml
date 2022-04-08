@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 stages:
-- stage: Build Dockerfile Staging
+- stage: Build_Dockerfile_Staging
   variables:
   - group: staging
   displayName: Build image
@@ -60,7 +60,7 @@ stages:
         imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
 
 
-- stage: Build Dockerfile Prod
+- stage: Build_Dockerfile_Prod
   variables:
   - group: prod
   displayName: Build image Prod
