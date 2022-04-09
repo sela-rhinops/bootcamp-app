@@ -70,8 +70,6 @@ stages:
 #     pool:
 #       name: prod     
 #     steps:
-#     - checkout: self
-#       #clean: true
 #     - bash: |
 #        sudo chmod 666 /var/run/docker.sock
 #        echo "# Host configuration
@@ -108,3 +106,32 @@ stages:
 #         dockerRegistryConnection: 'Docker Hub'
 #         action: 'Push an image'
 #         imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
+
+- stage: Deploy_Dockerfile_Staging
+  variables:
+  - group: staging
+  displayName: Run Ansible to deploy docker image/container
+  jobs:
+  - job: Ansible
+    displayName: Ansible
+    pool:
+      name: staging      
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "[servers]
+          server1 ansible_host=10.0.0.4
+          server2 ansible_host=10.0.0.5
+          #server3 ansible_host=10.0.0.6
+
+          [servers:vars]
+          ansible_python_interpreter=/usr/bin/python3
+          ansible_connection=ssh
+          ansible_user=ubuntu
+          ansible_ssh_pass=$(staging_web_pass)
+          env=staging
+          tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
+      displayName: Creating the inv file
+
