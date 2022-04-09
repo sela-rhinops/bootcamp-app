@@ -1,7 +1,7 @@
 ---
 - hosts: servers
   become: yes
-  gather_facts: yes
+  gather_facts: no
   ignore_unreachable: true
   # vars_files: inv.ini
   tasks:
