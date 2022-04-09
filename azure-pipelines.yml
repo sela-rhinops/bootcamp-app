@@ -136,12 +136,19 @@ stages:
           env=staging
           tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
       displayName: Creating the inv file
-    - task: Ansible@0
+    # - task: Ansible@0
+    #   inputs:
+    #     ansibleInterface: 'agentMachine'
+    #     playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
+    #     inventoriesAgentMachine: 'file'
+    #     inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
+    - task: Bash@3
       inputs:
-        ansibleInterface: 'agentMachine'
-        playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
-        inventoriesAgentMachine: 'file'
-        inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
+        targetType: 'inline'
+        script: |
+          ansible-playbook playbook.yaml -i inv.ini
+        workingDirectory: $(Build.SourcesDirectory)/ansible/
+      displayName: Deploying the staging container
 
 #################################################### Deploying Production docker container
 - stage: Deploy_Dockerfile_Prod
@@ -174,10 +181,17 @@ stages:
                   env=prod
                   tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
               displayName: Creating the inv file
-            - task: Ansible@0
+            # - task: Ansible@0
+            #   inputs:
+            #     ansibleInterface: 'agentMachine'
+            #     playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
+            #     inventoriesAgentMachine: 'file'
+            #     inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
+            #   displayName: Running ansible playbook to deploy the container
+            - task: Bash@3
               inputs:
-                ansibleInterface: 'agentMachine'
-                playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
-                inventoriesAgentMachine: 'file'
-                inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
-              displayName: Running ansible playbook to deploy the container
+                targetType: 'inline'
+                script: |
+                  ansible-playbook playbook.yaml -i inv.ini
+                workingDirectory: $(Build.SourcesDirectory)/ansible/
+              displayName: Deploying the production container
