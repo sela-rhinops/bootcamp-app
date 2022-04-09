@@ -140,4 +140,4 @@ stages:
         playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
         inventoriesAgentMachine: 'file'
         inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
-
+#
