@@ -149,7 +149,7 @@ stages:
   - group: prod
   displayName: Run Ansible to deploy docker image/container
   jobs:
-  - deployment: 'DeployToTest'
+  - deployment: 'DeployToProd'
     pool:
       name: prod   
     environment: 'prod'
