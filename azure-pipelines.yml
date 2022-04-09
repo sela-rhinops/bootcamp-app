@@ -134,4 +134,10 @@ stages:
           env=staging
           tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
       displayName: Creating the inv file
+    - task: Ansible@0
+      inputs:
+        ansibleInterface: 'agentMachine'
+        playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
+        inventoriesAgentMachine: 'file'
+        inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
 
