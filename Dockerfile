@@ -7,8 +7,8 @@ COPY . .
 # Install npm dependencies
 # initializing the database part of the env file
 # initializing npm
-RUN npm install
-    npm init -y
+RUN npm install &&\
+    npm init -y &&\
     npm run initdb
 # Opening port 8080 from the containter
 EXPOSE 8080
