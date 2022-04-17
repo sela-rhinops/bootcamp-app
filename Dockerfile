@@ -3,7 +3,7 @@ FROM node:14-alpine
 # Create app directory
 WORKDIR /home/ubuntu/bootcamp-app
 # Copy web files
-COPY package*.json
+COPY package*.json .
 RUN npm install
 # Install npm dependencies
 # initializing the database part of the env file
