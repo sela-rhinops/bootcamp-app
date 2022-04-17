@@ -45,21 +45,13 @@ stages:
        OKTA_CLIENT_ID=$(staging_okta_id)
        OKTA_CLIENT_SECRET=$(staging_okta_secret)" > ./.env
       displayName: 'Creating .env file (Staging)'
-    - task: Docker@0
-      displayName: 'Building an image (Staging)'
+    - task: Docker@2
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
-        defaultContext: false
-        imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
-    - task: Docker@0
-      displayName: 'Push an image (Staging)'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        action: 'Push an image'
-        imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
+        containerRegistry: 'joeyhd'
+        repository: 'joeyhd/staging-weight'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '1.0.$(Build.BuildId)'
 
 ####################################################### Prod image creation starts here
 - stage: Build_Dockerfile_Prod
@@ -93,21 +85,13 @@ stages:
        OKTA_CLIENT_ID=$(prod_okta_id)
        OKTA_CLIENT_SECRET=$(prod_okta_secret)" > ./.env
       displayName: 'Create .env file (Prod)'
-    - task: Docker@0
-      displayName: 'Build an image (Prod)'
+    - task: Docker@2
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
-        defaultContext: false
-        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
-    - task: Docker@0
-      displayName: 'Push an image (Prod)'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        action: 'Push an image'
-        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
+        containerRegistry: 'joeyhd'
+        repository: 'joeyhd/staging-weight'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '1.0.$(Build.BuildId)'
 
 ############################################################# Deploying Staging Docker container
 - stage: Deploy_Dockerfile_Staging
