@@ -36,4 +36,4 @@
       ignore_errors: yes
 
     - name: Start weight app container
-      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:1.0.{{ tag }} "
+      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:{{ tag }} "
