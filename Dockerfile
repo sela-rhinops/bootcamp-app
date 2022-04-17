@@ -12,5 +12,5 @@ RUN npm install &&\
     npm run initdb
 # Opening port 8080 from the containter
 EXPOSE 8080
-# Running the application (Entrypoint?=)
+# Running the application
 ENTRYPOINT [ "npm", "run", "dev" ]
