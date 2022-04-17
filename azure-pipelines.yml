@@ -4,6 +4,7 @@
 
 trigger:
 - main
+- feature/*
 
 resources:
 - repo: self
@@ -110,6 +111,7 @@ stages:
 
 ############################################################# Deploying Staging Docker container
 - stage: Deploy_Dockerfile_Staging
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   variables:
   - group: staging
   displayName: Run Ansible to deploy docker image/container
@@ -134,7 +136,7 @@ stages:
           ansible_user=ubuntu
           ansible_ssh_pass=$(staging_web_pass)
           env=staging
-          tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
+          tag=1.0.$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
       displayName: Creating the inv file
     # - task: Ansible@0
     #   inputs:
@@ -152,6 +154,7 @@ stages:
 
 #################################################### Deploying Production docker container
 - stage: Deploy_Dockerfile_Prod
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   variables:
   - group: prod
   displayName: Run Ansible to deploy docker image/container
@@ -179,7 +182,7 @@ stages:
                   ansible_user=ubuntu
                   ansible_ssh_pass=$(prod_web_pass)
                   env=prod
-                  tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
+                  tag=1.0.$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
               displayName: Creating the inv file
             # - task: Ansible@0
             #   inputs:
