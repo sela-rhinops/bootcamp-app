@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - hosts: servers
   become: yes
@@ -37,3 +38,44 @@
 
     - name: Start weight app container
       shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:1.0.{{ tag }} "
+=======
+---
+- hosts: servers
+  become: yes
+  gather_facts: no
+  ignore_unreachable: true
+  # vars_files: inv.ini
+  tasks:
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+
+    - name: docker and pip3 installation
+      apt:
+        name:
+          - python3-pip
+          - docker.io
+        state: present
+
+    - name: install docker using pip
+      pip:
+        name: docker-py
+
+    - name: Start docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull an image
+      docker_image:
+        name: joeyhd/{{ env }}-weight:{{ tag }}
+        source: pull
+        
+    - name: Stop running container if present
+      shell: docker stop $(docker ps)
+      ignore_errors: yes
+
+    - name: Start weight app container
+      shell: "docker run -d --restart=always -p 8080:8080 joeyhd/{{ env }}-weight:{{ tag }} "
+>>>>>>> fe3a966cbcfe3717e616f354fbb87b2b12feb62f
