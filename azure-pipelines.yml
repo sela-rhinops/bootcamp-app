@@ -48,7 +48,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'joeyhd'
-        repository: 'staging-weight'
+        repository: 'joeyhd/staging-weight'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '1.0.$(Build.BuildId)'
@@ -143,7 +143,7 @@ stages:
           ansible_user=ubuntu
           ansible_ssh_pass=$(staging_web_pass)
           env=staging
-          tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
+          tag=1.0.$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
       displayName: Creating the inv file
     # - task: Ansible@0
     #   inputs:
