@@ -28,7 +28,7 @@
 
     - name: Pull an image
       docker_image:
-        name: joeyhd/{{ env }}-weight:1.0.{{ tag }}
+        name: joeyhd/{{ env }}-weight:{{ tag }}
         source: pull
         
     - name: Stop running container if present
