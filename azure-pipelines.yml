@@ -88,7 +88,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'joeyhd'
-        repository: 'joeyhd/staging-weight'
+        repository: 'joeyhd/prod-weight'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '1.0.$(Build.BuildId)'
