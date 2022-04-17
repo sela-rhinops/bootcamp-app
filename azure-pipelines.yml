@@ -61,52 +61,52 @@ stages:
         imageName: 'joeyhd/staging-weight:1.0.$(Build.BuildId)'
 
 ####################################################### Prod image creation starts here
-- stage: Build_Dockerfile_Prod
-  variables:
-  - group: prod
-  displayName: Dockerfile build and push (Prod)
-  jobs:
-  - job: Docker_image
-    displayName: Creating the docker image
-    pool:
-      name: prod     
-    steps:
-    - bash: |
-       sudo chmod 666 /var/run/docker.sock
-       echo "# Host configuration
-       PORT=8080
-       HOST=0.0.0.0
-       # Postgres configuration
-       PGHOST=prod-bootcamp-psqlflexibleserver.postgres.database.azure.com
-       PGUSERNAME=psqladmin
-       PGDATABASE=postgres
-       PGPASSWORD=$(prod_postgres_pass)
-       PGPORT=5432
+# - stage: Build_Dockerfile_Prod
+#   variables:
+#   - group: prod
+#   displayName: Dockerfile build and push (Prod)
+#   jobs:
+#   - job: Docker_image
+#     displayName: Creating the docker image
+#     pool:
+#       name: prod     
+#     steps:
+#     - bash: |
+#        sudo chmod 666 /var/run/docker.sock
+#        echo "# Host configuration
+#        PORT=8080
+#        HOST=0.0.0.0
+#        # Postgres configuration
+#        PGHOST=prod-bootcamp-psqlflexibleserver.postgres.database.azure.com
+#        PGUSERNAME=psqladmin
+#        PGDATABASE=postgres
+#        PGPASSWORD=$(prod_postgres_pass)
+#        PGPORT=5432
        
-       HOST_URL=http://$(prod_lb_ip):8080
-       COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
-       NODE_ENV=development
+#        HOST_URL=http://$(prod_lb_ip):8080
+#        COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+#        NODE_ENV=development
        
-       # Okta configuration
-       OKTA_ORG_URL=https://dev-79904368.okta.com
-       OKTA_CLIENT_ID=$(prod_okta_id)
-       OKTA_CLIENT_SECRET=$(prod_okta_secret)" > ./.env
-      displayName: 'Create .env file (Prod)'
-    - task: Docker@0
-      displayName: 'Build an image (Prod)'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
-        defaultContext: false
-        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
-    - task: Docker@0
-      displayName: 'Push an image (Prod)'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        action: 'Push an image'
-        imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
+#        # Okta configuration
+#        OKTA_ORG_URL=https://dev-79904368.okta.com
+#        OKTA_CLIENT_ID=$(prod_okta_id)
+#        OKTA_CLIENT_SECRET=$(prod_okta_secret)" > ./.env
+#       displayName: 'Create .env file (Prod)'
+#     - task: Docker@0
+#       displayName: 'Build an image (Prod)'
+#       inputs:
+#         containerregistrytype: 'Container Registry'
+#         dockerRegistryConnection: 'Docker Hub'
+#         dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
+#         defaultContext: false
+#         imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
+#     - task: Docker@0
+#       displayName: 'Push an image (Prod)'
+#       inputs:
+#         containerregistrytype: 'Container Registry'
+#         dockerRegistryConnection: 'Docker Hub'
+#         action: 'Push an image'
+#         imageName: 'joeyhd/prod-weight:1.0.$(Build.BuildId)'
 
 ############################################################# Deploying Staging Docker container
 - stage: Deploy_Dockerfile_Staging
@@ -151,47 +151,47 @@ stages:
       displayName: Deploying the staging container
 
 #################################################### Deploying Production docker container
-- stage: Deploy_Dockerfile_Prod
-  variables:
-  - group: prod
-  displayName: Run Ansible to deploy docker image/container
-  jobs:
-  - deployment: 'DeployToProd'
-    pool:
-      name: prod   
-    environment: 'prod'
-    strategy:
-        runOnce:
-          deploy:   
-            steps:
-            - task: Bash@3
-              inputs:
-                targetType: 'inline'
-                script: |
-                  echo "[servers]
-                  server1 ansible_host=10.0.0.4
-                  server2 ansible_host=10.0.0.5
-                  server3 ansible_host=10.0.0.6
+# - stage: Deploy_Dockerfile_Prod
+#   variables:
+#   - group: prod
+#   displayName: Run Ansible to deploy docker image/container
+#   jobs:
+#   - deployment: 'DeployToProd'
+#     pool:
+#       name: prod   
+#     environment: 'prod'
+#     strategy:
+#         runOnce:
+#           deploy:   
+#             steps:
+#             - task: Bash@3
+#               inputs:
+#                 targetType: 'inline'
+#                 script: |
+#                   echo "[servers]
+#                   server1 ansible_host=10.0.0.4
+#                   server2 ansible_host=10.0.0.5
+#                   server3 ansible_host=10.0.0.6
 
-                  [servers:vars]
-                  ansible_python_interpreter=/usr/bin/python3
-                  ansible_connection=ssh
-                  ansible_user=ubuntu
-                  ansible_ssh_pass=$(prod_web_pass)
-                  env=prod
-                  tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
-              displayName: Creating the inv file
-            # - task: Ansible@0
-            #   inputs:
-            #     ansibleInterface: 'agentMachine'
-            #     playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
-            #     inventoriesAgentMachine: 'file'
-            #     inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
-            #   displayName: Running ansible playbook to deploy the container
-            - task: Bash@3
-              inputs:
-                targetType: 'inline'
-                script: |
-                  ansible-playbook playbook.yaml -i inv.ini
-                workingDirectory: $(Build.SourcesDirectory)/ansible/
-              displayName: Deploying the production container
+#                   [servers:vars]
+#                   ansible_python_interpreter=/usr/bin/python3
+#                   ansible_connection=ssh
+#                   ansible_user=ubuntu
+#                   ansible_ssh_pass=$(prod_web_pass)
+#                   env=prod
+#                   tag=$(Build.BuildId)" > $(Build.SourcesDirectory)/ansible/inv.ini
+#               displayName: Creating the inv file
+#             # - task: Ansible@0
+#             #   inputs:
+#             #     ansibleInterface: 'agentMachine'
+#             #     playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yaml'
+#             #     inventoriesAgentMachine: 'file'
+#             #     inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inv.ini'
+#             #   displayName: Running ansible playbook to deploy the container
+#             - task: Bash@3
+#               inputs:
+#                 targetType: 'inline'
+#                 script: |
+#                   ansible-playbook playbook.yaml -i inv.ini
+#                 workingDirectory: $(Build.SourcesDirectory)/ansible/
+#               displayName: Deploying the production container
