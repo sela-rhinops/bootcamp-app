@@ -40,3 +40,5 @@ pm2
 expose port 80
 make site live then connect db as second stage.
 map port? connect default?
+
+sudo systemctl start pm2-ubuntu
