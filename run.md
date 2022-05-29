@@ -31,3 +31,12 @@ i also need to connect db between servers - hosts? ssh?
 postgres using docker expose port
 
 https://docs.docker.com/samples/postgresql_service/
+https://techexpert.tips/postgresql/postgresql-docker-installation/
+
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+
+so, nginex is sort of installed, need to :
+pm2
+expose port 80
+make site live then connect db as second stage.
+map port? connect default?
