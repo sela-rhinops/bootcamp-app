@@ -23,3 +23,11 @@ Your request resulted in an error. The 'redirect_uri' parameter must be a Login 
 deleted app, recreate - oauth 2, web
 assign users to app
 https://dev-96311573-admin.okta.com/admin/apps/active
+
+server run has the project installed - the nodejs
+
+1st site needs nginx, and reversed proxy
+i also need to connect db between servers - hosts? ssh?
+postgres using docker expose port
+
+https://docs.docker.com/samples/postgresql_service/

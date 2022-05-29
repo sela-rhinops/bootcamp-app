@@ -11,5 +11,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 node_modules/
 .npm
 .env
+.env_private
 .DS_Store
 tools/test.js
