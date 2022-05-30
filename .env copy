@@ -1,0 +1,18 @@
+# Host configuration
+PORT=8080
+HOST=localhost
+NODE_ENV=development
+HOST_URL=http://localhost:8080/
+COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
+
+# Okta configuration
+OKTA_ORG_URL="https://dev-34167746.okta.com/"
+OKTA_CLIENT_ID="0oa53jp6p1UG5ZPZd5d7"
+OKTA_CLIENT_SECRET="2xZLJXr3AH3g6nPhOhiZ_l2q4J5YKolg97rbcRO4"
+
+# Postgres configuration
+PGHOST=35.204.219.10
+PGUSERNAME=postgres
+PGDATABASE=postgres
+POSTGRES_PASSWORD=p@ssw0rd42
+PGPORT=5432
