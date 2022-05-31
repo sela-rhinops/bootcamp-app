@@ -1,0 +1,11 @@
+ssh ubuntu@34.147.5.223
+
+- install node 14 -V
+  https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
+
+- git project
+- nginx pm2
+
+toolbox
+free
+free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
