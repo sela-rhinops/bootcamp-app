@@ -1,5 +1,7 @@
 # Node.js Weight Tracker
 
+test merge
+
 ![Demo](docs/build-weight-tracker-app-demo.gif)
 
 This sample application demonstrates the following technologies.
