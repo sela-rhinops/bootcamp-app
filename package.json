@@ -4,6 +4,7 @@
 	"description": "Sample Node.js web application using hapi, PostgreSQL, and Okta",
 	"main": "src/index.js",
 	"scripts": {
+		"start": "node src/index.js",
 		"dev": "nodemon --watch src -e css,ejs,js src/index.js",
 		"initdb": "node tools/initdb.js",
 		"lint": "eslint --fix ./",
