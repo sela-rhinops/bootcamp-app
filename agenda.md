@@ -13,3 +13,5 @@ git merge master
 git reflog
 git push origin new_feature
 </pre>
+
+build pipeline:
