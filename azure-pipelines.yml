@@ -7,7 +7,8 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  name: test1
+  vmImage: local1
 
 steps:
 - script: echo Hello, world!
