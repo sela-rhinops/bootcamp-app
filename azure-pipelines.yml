@@ -41,8 +41,8 @@ stages:
     - task: CopyFiles@2
       inputs:
         Contents: | 
-          **\**
-          !**\node_modules\**
+          **
+          !**\node_modules
           !.env
         TargetFolder: $(Build.ArtifactStagingDirectory)
 
