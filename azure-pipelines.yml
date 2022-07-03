@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build App - $(APP_NAME)'
+  displayName: 'Build App - ${{APP_NAME}}'
 
   jobs:
   - job: 'Build'
@@ -30,7 +30,7 @@ stages:
     steps:
     - script: |
         echo selected target : ${{parameters.TARGET_ENV}}
-        echo postgres user : $(postgres_user)
+        echo postgres user : $(PGUSERNAME)
     - task: NodeTool@0
       inputs:
         versionSpec: '14.x'
@@ -56,14 +56,14 @@ stages:
         publishLocation: 'Container'
 
 - stage: 'Deploy'
-  displayName: 'Deploy $(APP_NAME)'
+  displayName: 'Deploy ${{APP_NAME}}'
   dependsOn: 'Build'
   condition: true
   jobs:
-  - deployment: 'DeployToStage'
-    displayName: 'Deploy $(APP_NAME) to stage environment'
+  - deployment: 'DeployTo${{parameters.TARGET_ENV}}'
+    displayName: 'Deploy ${{APP_NAME}} to ${{parameters.TARGET_ENV}} environment'
     environment:
-     name: stage
+     name: ${{parameters.TARGET_ENV}}
      resourceType: VirtualMachine
      tags: app-${{parameters.TARGET_ENV}}
     strategy:
