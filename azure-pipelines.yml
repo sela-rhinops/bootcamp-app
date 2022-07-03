@@ -65,6 +65,12 @@ stages:
          steps:
          - download: current
            artifact: drop
+         
+         - script: mkdir weight-tracker-app
+           displayName: create app directory
+        
+         
+
              
 
 
