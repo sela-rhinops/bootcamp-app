@@ -17,30 +17,54 @@ parameters:
     - 'stage'
     - 'prod'
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: 'Build'
+  displayName: 'Build web tracker application'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build Job'
+  
+    pool:
+      vmImage: ubuntu-latest
 
-- script: |
-    npm install
-  displayName: 'npm install'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.x'
+      displayName: 'Install Node.js'
 
-- task: CopyFiles@2
-  inputs:
-    targetFolder: '$(Build.ArtifactStagingDirectory)' 
+    - script: |
+       npm install
+      displayName: 'npm install'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    - task: CopyFiles@2
+      inputs:
+        targetFolder: '$(Build.ArtifactStagingDirectory)' 
 
-- task: DownloadPipelineArtifact@2
-  inputs:
-    buildType: 'current'
-    targetPath: '$(Pipeline.Workspace)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: 'Deploy'
+  displayName: 'Deploy web tracker app'
+  dependsOn: 'Build'
+  jobs:
+  - deployment: 'DeployToStage'
+    displayName: 'Deploy web tracker to stage environment'
+    environment:
+     name: stage
+     resourceType: VirtualMachine
+     tags: app-stage
+    strategy:
+     rolling:
+       maxParallel: 1
+       deploy:
+         steps:
+         - download: current
+           artifact: drop
+             
+
+
