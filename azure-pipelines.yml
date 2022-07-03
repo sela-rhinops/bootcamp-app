@@ -66,8 +66,16 @@ stages:
          - download: current
            artifact: drop
          
-         - script: mkdir weight-tracker-app
-           displayName: create app directory
+         - task: Bash@3
+           inputs:
+            targetType: 'inline'
+            script: 'cd ~ && mkdir weight-tracker-app'
+          
+         - task: Bash@3
+           inputs:
+            targetType: 'inline'
+            script: 'cp -a $(Pipeline.Workspace)\drop\. ~\weight-tracker-app\'
+
         
          
 
