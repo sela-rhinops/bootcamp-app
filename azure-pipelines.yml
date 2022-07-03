@@ -87,7 +87,7 @@ stages:
              targetType: 'inline'
              script: |
               cd ~/weight-tracker-app/
-              echo COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong! >> .env
+              echo COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong! > .env
               echo OKTA_ORG_URL=https://dev-91289822.okta.com >> .env
               echo OKTA_CLIENT_ID=0oa59m58ttDIS3oDb5d7 >> .env
               echo OKTA_CLIENT_SECRET=CbFuUB44qPZ1dWL1xdM0Isu3j8QV5O_qTqc3cXXz >> .env
