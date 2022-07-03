@@ -74,7 +74,7 @@ stages:
          - task: Bash@3
            inputs:
             targetType: 'inline'
-            script: 'cd ~ && mkdir -p weight-tracker-app'
+            script: 'cd ~ && rm -rf  weight-tracker-app &&  mkdir weight-tracker-app'
           
          - task: Bash@3
            inputs:
@@ -85,6 +85,7 @@ stages:
            inputs:
              targetType: 'inline'
              script: |
+              cd ~/weight-tracker-app/
               echo COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong! >> .env
               echo OKTA_ORG_URL=https://dev-91289822.okta.com >> .env
               echo OKTA_CLIENT_ID=0oa59m58ttDIS3oDb5d7 >> .env
