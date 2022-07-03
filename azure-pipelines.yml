@@ -15,12 +15,10 @@ parameters:
 
 variables:
 - group: ${{parameters.TARGET_ENV}}
-- name: app_name
-  value: $(APP_NAME)
 
 stages:
 - stage: 'Build'
-  displayName: 'Build App - ${{ variables.app_name }}'
+  displayName: 'Build App - Weight Tracker App - ${{parameters.TARGET_ENV}}'
 
   jobs:
   - job: 'Build'
@@ -58,12 +56,12 @@ stages:
         publishLocation: 'Container'
 
 - stage: 'Deploy'
-  displayName: 'Deploy $(APP_NAME)'
+  displayName: 'Deploy Weight Tracker App'
   dependsOn: 'Build'
   condition: false
   jobs:
   - deployment: 'DeployTo${{parameters.TARGET_ENV}}'
-    displayName: 'Deploy $(APP_NAME) to ${{parameters.TARGET_ENV}} environment'
+    displayName: 'Deploy Weight Tracker App to ${{parameters.TARGET_ENV}} environment'
     environment:
      name: ${{parameters.TARGET_ENV}}
      resourceType: VirtualMachine
