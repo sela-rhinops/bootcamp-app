@@ -117,7 +117,7 @@ stages:
            inputs:
              targetType: 'inline'
              script: |
-               psql  "host={{ db_host }} port=5432 dbname=postgres user={{ db_username }} password={{ db_password }}" -tc "SELECT 1 FROM pg_database WHERE datname = 'weight-tracker-db'" | grep -q 1 || psql "host={{ db_host }} port=5432 dbname=postgres user={{ db_username }} password={{ db_password }}" -c '\x' -c 'CREATE DATABASE "weight-tracker-db";'
+               psql  "host=$(PGHOST) port=5432 dbname=postgres user=$(PGUSERNAME) password=$(PGPASSWORD)" -tc "SELECT 1 FROM pg_database WHERE datname = '$(PGDATABASE)'" | grep -q 1 || psql "host=$(PGHOST) port=5432 dbname=postgres user=$(PGUSERNAME) password=$(PGPASSWORD)" -c '\x' -c 'CREATE DATABASE "$(PGDATABASE)";'
          - task: Bash@3
            displayName: Initiate App Database
            inputs:
