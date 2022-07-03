@@ -5,10 +5,6 @@
 
 trigger: none
 parameters:
-  - name: SOURCE_POST_PR
-    default: "last_build"
-    displayName: "Post PR pipeline build number to use"
-    type: string
   - name: TARGET_ENV
     default: "stage"
     displayName: "Select Target Env For release"
@@ -16,6 +12,9 @@ parameters:
     values:
     - 'stage'
     - 'prod'
+
+variables:
+- group: ${{parameters.TARGET_ENV}}
 
 stages:
 - stage: 'Build'
@@ -29,7 +28,9 @@ stages:
       vmImage: ubuntu-latest
 
     steps:
-    - script: echo ${{parameters.TARGET_ENV}}
+    - script: |
+        echo selected target : ${{parameters.TARGET_ENV}}
+        echo postgres user : $(postgres_user)
     - task: NodeTool@0
       inputs:
         versionSpec: '14.x'
@@ -57,6 +58,7 @@ stages:
 - stage: 'Deploy'
   displayName: 'Deploy web tracker app'
   dependsOn: 'Build'
+  condition: false
   jobs:
   - deployment: 'DeployToStage'
     displayName: 'Deploy web tracker to stage environment'
