@@ -33,13 +33,14 @@ stages:
       inputs:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
+    
+    - script: |
+        npm install
+      displayName: 'npm install'
 
     - task: CopyFiles@2
       inputs:
-        Contents: |
-          **\**
-          !**\node_modules\**
-          !.env
+        Contents: '**/.artifactignore'
         TargetFolder: $(Build.ArtifactStagingDirectory)
 
     - task: PublishBuildArtifacts@1
