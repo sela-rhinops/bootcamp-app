@@ -29,6 +29,7 @@ stages:
       vmImage: ubuntu-latest
 
     steps:
+    - script: echo ${TARGET_ENV}
     - task: NodeTool@0
       inputs:
         versionSpec: '14.x'
