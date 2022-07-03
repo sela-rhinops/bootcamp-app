@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build App - $(APP_NAME)'
+  displayName: 'Build App - ${APP_NAME}'
 
   jobs:
   - job: 'Build'
@@ -58,7 +58,7 @@ stages:
 - stage: 'Deploy'
   displayName: 'Deploy $(APP_NAME)'
   dependsOn: 'Build'
-  condition: true
+  condition: false
   jobs:
   - deployment: 'DeployTo${{parameters.TARGET_ENV}}'
     displayName: 'Deploy $(APP_NAME) to ${{parameters.TARGET_ENV}} environment'
