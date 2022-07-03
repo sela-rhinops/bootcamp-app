@@ -15,10 +15,12 @@ parameters:
 
 variables:
 - group: ${{parameters.TARGET_ENV}}
+- name: app_name
+  value: $(APP_NAME)
 
 stages:
 - stage: 'Build'
-  displayName: 'Build App - ${{ variables.APP_NAME }}'
+  displayName: 'Build App - ${{ variables.app_name }}'
 
   jobs:
   - job: 'Build'
