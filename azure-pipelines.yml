@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build web tracker application'
+  displayName: 'Build App - $(APP_NAME)'
 
   jobs:
   - job: 'Build'
@@ -56,16 +56,16 @@ stages:
         publishLocation: 'Container'
 
 - stage: 'Deploy'
-  displayName: 'Deploy web tracker app'
+  displayName: 'Deploy $(APP_NAME)'
   dependsOn: 'Build'
   condition: false
   jobs:
   - deployment: 'DeployToStage'
-    displayName: 'Deploy web tracker to stage environment'
+    displayName: 'Deploy $(APP_NAME) to stage environment'
     environment:
      name: stage
      resourceType: VirtualMachine
-     tags: app-stage
+     tags: app-${{parameters.TARGET_ENV}}
     strategy:
      rolling:
        maxParallel: 1
@@ -77,30 +77,30 @@ stages:
          - task: Bash@3
            inputs:
             targetType: 'inline'
-            script: 'cd ~ && rm -rf  weight-tracker-app &&  mkdir weight-tracker-app'
+            script: 'cd ~ && rm -rf  $(APP_NAME) &&  mkdir $(APP_NAME)'
           
          - task: Bash@3
            inputs:
             targetType: 'inline'
-            script: 'cp -a $(Pipeline.Workspace)/drop/. ~/weight-tracker-app/'
+            script: 'cp -a $(Pipeline.Workspace)/drop/. ~/$(APP_NAME)/'
           
          - task: Bash@3
            inputs:
              targetType: 'inline'
              script: |
-              cd ~/weight-tracker-app/
-              echo COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong! > .env
-              echo OKTA_ORG_URL=https://dev-91289822.okta.com >> .env
-              echo OKTA_CLIENT_ID=0oa59m58ttDIS3oDb5d7 >> .env
-              echo OKTA_CLIENT_SECRET=CbFuUB44qPZ1dWL1xdM0Isu3j8QV5O_qTqc3cXXz >> .env
-              echo NODE_ENV=production >> .env
-              echo PORT=8080 >> .env
+              cd ~/$(APP_NAME)/
+              echo COOKIE_ENCRYPT_PWD=$(COOKIE_ENCRYPT_PWD) > .env
+              echo OKTA_ORG_URL=$(OKTA_ORG_URL) >> .env
+              echo OKTA_CLIENT_ID=$(OKTA_CLIENT_ID) >> .env
+              echo OKTA_CLIENT_SECRET=$(OKTA_CLIENT_SECRET) >> .env
+              echo NODE_ENV=$(NODE_ENV) >> .env
+              echo PORT=$(PORT) >> .env
               printf "%s%s\n" "Host=" "$(hostname -I)" >> .env
-              echo PGHOST=localhost >> .env
-              echo PGUSERNAME=postgres >> .env
-              echo PGDATABASE=postgres >> .env
-              echo PGPASSWORD=postTHEgres >> .env
-              echo PGPORT=5432 >> .env
+              echo PGHOST=$(PGHOST) >> .env
+              echo PGUSERNAME=$(PGUSERNAME) >> .env
+              echo PGDATABASE=$(PGDATABASE) >> .env
+              echo PGPASSWORD=$(PGPASSWORD) >> .env
+              echo PGPORT=$(PGPORT) >> .env
            
         
          
