@@ -18,7 +18,7 @@ variables:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build App - variables[''APP_NAME'']'
+  displayName: 'Build App - ${{ variables.APP_NAME }}'
 
   jobs:
   - job: 'Build'
