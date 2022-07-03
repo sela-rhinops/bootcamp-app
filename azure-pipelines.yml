@@ -58,7 +58,7 @@ stages:
 - stage: 'Deploy'
   displayName: 'Deploy $(APP_NAME)'
   dependsOn: 'Build'
-  condition: false
+  condition: true
   jobs:
   - deployment: 'DeployToStage'
     displayName: 'Deploy $(APP_NAME) to stage environment'
