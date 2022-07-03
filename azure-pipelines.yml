@@ -95,7 +95,7 @@ stages:
               echo OKTA_CLIENT_SECRET=$(OKTA_CLIENT_SECRET) >> .env
               echo NODE_ENV=$(NODE_ENV) >> .env
               echo PORT=$(PORT) >> .env
-              printf "%s%s\n" "Host=" "$(hostname -I)" >> .env
+              printf "%s%s\n" "HOST=" "$(hostname -I)" >> .env
               echo PGHOST=$(PGHOST) >> .env
               echo PGUSERNAME=$(PGUSERNAME) >> .env
               echo PGDATABASE=$(PGDATABASE) >> .env
