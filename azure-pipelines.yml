@@ -56,6 +56,7 @@ stages:
 
 - stage: 'Deploy'
   displayName: 'Deploy web tracker app'
+  condition: false
   dependsOn: 'Build'
   jobs:
   - deployment: 'DeployToStage'
