@@ -72,19 +72,23 @@ stages:
        deploy:
          steps:
          - download: current
+           displayName: Download artifact on remote machine
            artifact: drop
          
          - task: Bash@3
+           displayName: Create Weight Tracker App Folder on remote machine
            inputs:
             targetType: 'inline'
             script: 'cd ~ && rm -rf  $(APP_NAME) &&  mkdir $(APP_NAME)'
           
          - task: Bash@3
+           displayName: Copy artifact on app folder
            inputs:
             targetType: 'inline'
             script: 'cp -a $(Pipeline.Workspace)/drop/. ~/$(APP_NAME)/'
           
          - task: Bash@3
+           displayName: Configure app environment file on remote machine
            inputs:
              targetType: 'inline'
              script: |
@@ -101,8 +105,40 @@ stages:
               echo PGDATABASE=$(PGDATABASE) >> .env
               echo PGPASSWORD=$(PGPASSWORD) >> .env
               echo PGPORT=$(PGPORT) >> .env
-           
-        
+
+         - task: Bash@3
+           displayName: Install postgres client on remote machine
+           inputs:
+             targetType: 'inline'
+             script: |
+               psql --version || sudo apt-get install -y postgresql-client 
+         - task: Bash@3
+           displayName: Create Weight Tracker Db
+           inputs:
+             targetType: 'inline'
+             script: |
+               psql  "host={{ db_host }} port=5432 dbname=postgres user={{ db_username }} password={{ db_password }}" -tc "SELECT 1 FROM pg_database WHERE datname = 'weight-tracker-db'" | grep -q 1 || psql "host={{ db_host }} port=5432 dbname=postgres user={{ db_username }} password={{ db_password }}" -c '\x' -c 'CREATE DATABASE "weight-tracker-db";'
+         - task: Bash@3
+           displayName: Initiate App Database
+           inputs:
+             targetType: 'inline'
+             script: |
+               cd ~/weight-tracker-app && npm run initdb
+
+         - task: Bash@3
+           displayName: Install PM2
+           inputs:
+             targetType: 'inline'
+             script: |
+               sudo npm install pm2@latest -g
+          
+         - task: Bash@3
+           displayName: Bootstrap weight tracker app with PM2
+           inputs:
+             targetType: 'inline'
+             script: |
+               cd ~/weight-tracker-app && pm2 delete "weight-tracker"; pm2 startup && pm2 start src/index.js --name "weight-tracker" && pm2 save
+               
          
 
              
