@@ -77,6 +77,7 @@ stages:
             script: 'cp -a $(Pipeline.Workspace)/drop/. ~/weight-tracker-app/'
           
          - script: npm install
+           displayName: installing application dependencies
            
         
          
