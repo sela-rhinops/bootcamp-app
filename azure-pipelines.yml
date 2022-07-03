@@ -74,7 +74,7 @@ stages:
          - task: Bash@3
            inputs:
             targetType: 'inline'
-            script: 'cp -a $(Pipeline.Workspace)\drop\. ~\weight-tracker-app\'
+            script: 'cp -a $(Pipeline.Workspace)/drop/. ~/weight-tracker-app/'
 
         
          
