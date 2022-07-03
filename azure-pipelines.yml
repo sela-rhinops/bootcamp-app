@@ -81,8 +81,22 @@ stages:
             targetType: 'inline'
             script: 'cp -a $(Pipeline.Workspace)/drop/. ~/weight-tracker-app/'
           
-         - script: npm install
-           displayName: installing application dependencies
+         - task: Bash@3
+           inputs:
+             targetType: 'inline'
+             script: |
+              echo COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong! >> .env
+              echo OKTA_ORG_URL=https://dev-91289822.okta.com >> .env
+              echo OKTA_CLIENT_ID=0oa59m58ttDIS3oDb5d7 >> .env
+              echo OKTA_CLIENT_SECRET=CbFuUB44qPZ1dWL1xdM0Isu3j8QV5O_qTqc3cXXz >> .env
+              echo NODE_ENV=production >> .env
+              echo PORT=8080 >> .env
+              printf "%s%s\n" "Host=" "$(hostname -I)" >> .env
+              echo PGHOST=localhost >> .env
+              echo PGUSERNAME=postgres >> .env
+              echo PGDATABASE=postgres >> .env
+              echo PGPASSWORD=postTHEgres >> .env
+              echo PGPORT=5432 >> .env
            
         
          
