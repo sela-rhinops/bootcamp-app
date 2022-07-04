@@ -36,9 +36,12 @@ stages:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
     
-    - script: |
-        npm install
+    - task: Npm@1
       displayName: 'npm install'
+      inputs:
+        verbose: true
+        customRegistry: useFeed
+        customFeed: '377c275b-adfb-4840-a04a-81ca566f4829/4f65c0b9-ec79-4b16-9c7e-868528a0dc13'
 
     # - task: CopyFiles@2
     #   inputs:
