@@ -29,123 +29,32 @@ stages:
 
     steps:
     - script: |
-        echo selected target : ${{parameters.TARGET_ENV}}
-        echo postgres user : $(PGUSERNAME)
+        echo selected target : Selected environment : ${{parameters.TARGET_ENV}}
+
     - task: NodeTool@0
+      displayName: 'Install Node.js'
       inputs:
         versionSpec: '14.x'
-      displayName: 'Install Node.js'
+      
+    - task: Npm@1
+      displayName: 'Update application version'
+      inputs:
+        command: 'custom'
+        customCommand: 'version  1.1.$(build.buildid) --no-git-tag-version'
+        customRegistry: 'useFeed'
+        customFeed: 'b1cb2c79-6494-4aae-9934-2fc8f4c2046f/94a83a3b-7d49-45d7-8a5a-4edaaebb6c3f'
     
     - task: Npm@1
-      displayName: 'npm install'
+      displayName: 'npm install : install app dependencies'
       inputs:
         verbose: true
         customRegistry: useFeed
         customFeed: '377c275b-adfb-4840-a04a-81ca566f4829/4f65c0b9-ec79-4b16-9c7e-868528a0dc13'
-
-    # - task: CopyFiles@2
-    #   inputs:
-    #     Contents: | 
-    #       **/*
-    #       !node_modules/**
-    #       !.git/**
-    #       !.env
-    #     TargetFolder: $(Build.ArtifactStagingDirectory)
       
     - task: Npm@1
-      displayName: 'npm publish'
+      displayName: 'npm publish : publish to Artifactory'
       inputs:
         command: publish
         verbose: false
         publishRegistry: useFeed
         publishFeed: '377c275b-adfb-4840-a04a-81ca566f4829/4f65c0b9-ec79-4b16-9c7e-868528a0dc13'
-
-- stage: 'Deploy'
-  displayName: 'Deploy Weight Tracker App'
-  dependsOn: 'Build'
-  condition: false
-  jobs:
-  - deployment: 'DeployTo${{parameters.TARGET_ENV}}'
-    displayName: 'Deploy Weight Tracker App to ${{parameters.TARGET_ENV}} environment'
-    environment:
-     name: ${{parameters.TARGET_ENV}}
-     resourceType: VirtualMachine
-     tags: app-${{parameters.TARGET_ENV}}
-    strategy:
-     rolling:
-       maxParallel: 1
-       deploy:
-         steps:
-         - download: current
-           displayName: Download artifact on remote machine
-           artifact: drop
-         
-         - task: Bash@3
-           displayName: Create Weight Tracker App Folder on remote machine
-           inputs:
-            targetType: 'inline'
-            script: 'cd ~ && rm -rf  $(APP_NAME) &&  mkdir $(APP_NAME)'
-          
-         - task: Bash@3
-           displayName: Copy artifact on app folder
-           inputs:
-            targetType: 'inline'
-            script: 'cp -a $(Pipeline.Workspace)/drop/. ~/$(APP_NAME)/'
-          
-         - task: Bash@3
-           displayName: Configure app environment file on remote machine
-           inputs:
-             targetType: 'inline'
-             script: |
-              cd ~/$(APP_NAME)/
-              echo COOKIE_ENCRYPT_PWD=$(COOKIE_ENCRYPT_PWD) > .env
-              echo OKTA_ORG_URL=$(OKTA_ORG_URL) >> .env
-              echo OKTA_CLIENT_ID=$(OKTA_CLIENT_ID) >> .env
-              echo OKTA_CLIENT_SECRET=$(OKTA_CLIENT_SECRET) >> .env
-              echo NODE_ENV=$(NODE_ENV) >> .env
-              echo PORT=$(PORT) >> .env
-              printf "%s%s\n" "HOST=" "$(hostname -I)" >> .env
-              echo PGHOST=$(PGHOST) >> .env
-              echo PGUSERNAME=$(PGUSERNAME) >> .env
-              echo PGDATABASE=$(PGDATABASE) >> .env
-              echo PGPASSWORD=$(PGPASSWORD) >> .env
-              echo PGPORT=$(PGPORT) >> .env
-
-         - task: Bash@3
-           displayName: Install postgres client on remote machine
-           inputs:
-             targetType: 'inline'
-             script: |
-               psql --version || sudo apt-get install -y postgresql-client 
-         - task: Bash@3
-           displayName: Create Weight Tracker Db
-           inputs:
-             targetType: 'inline'
-             script: |
-               psql  "host=$(PGHOST) port=5432 dbname=postgres user=$(PGUSERNAME) password=$(PGPASSWORD)" -tc "SELECT 1 FROM pg_database WHERE datname = '$(PGDATABASE)'" | grep -q 1 || psql "host=$(PGHOST) port=5432 dbname=postgres user=$(PGUSERNAME) password=$(PGPASSWORD)" -c '\x' -c 'CREATE DATABASE "$(PGDATABASE)";'
-         - task: Bash@3
-           displayName: Initiate App Database
-           inputs:
-             targetType: 'inline'
-             script: |
-               cd ~/weight-tracker-app && npm run initdb
-
-         - task: Bash@3
-           displayName: Install PM2
-           inputs:
-             targetType: 'inline'
-             script: |
-               sudo npm install pm2@latest -g
-          
-         - task: Bash@3
-           displayName: Bootstrap weight tracker app with PM2
-           inputs:
-             targetType: 'inline'
-             script: |
-               cd ~/weight-tracker-app && pm2 delete "weight-tracker"; pm2 startup && pm2 start src/index.js --name "weight-tracker" && pm2 save
-               
-         
-
-             
-
-
