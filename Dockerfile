@@ -4,7 +4,7 @@ RUN mkdir -p /home/weight-tracker
 
 COPY . /home/weight-tracker
 
-COPY c:/mount/data/.env /home/weight-tracker
+COPY ~/mount/data/.env /home/weight-tracker
 
 WORKDIR /home/weight-tracker
 
