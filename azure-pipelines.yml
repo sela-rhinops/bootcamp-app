@@ -22,7 +22,7 @@ variables:
 
 stages:
 - stage: Build
-  condition: eq(variables['build.sourceBranch'], 'refs/heads/feature.')
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/feature.'))
   displayName: Build feature branch
   jobs:
   - job: Build
