@@ -4,6 +4,7 @@
 
 trigger:
 - master
+- feature/*
 
 resources:
 - repo: self
@@ -21,23 +22,14 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  condition: eq(variables['build.sourceBranch'], 'refs/heads/feature.')
+  displayName: Build feature branch
   jobs:
-  - job: Build
-    displayName: Build
+  - job: Build Feature
+    displayName: Build Feature
     pool:
       vmImage: $(vmImageName)
     steps:
-    # - task: Docker@2
-    #   displayName: Build and push an image to container registry
-    #   inputs:
-    #     command: buildAndPush
-    #     repository: $(imageRepository)
-    #     dockerfile: $(dockerfilePath)
-    #     containerRegistry: $(dockerRegistryServiceConnection)
-    #     tags: |
-    #       latest
-    #       $(tag)
     - task: Docker@2
       inputs:
         containerRegistry: 'bootcampdockercr'
