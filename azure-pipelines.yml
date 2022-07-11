@@ -19,6 +19,7 @@ parameters:
     - 'prod'
 
 variables:
+
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'df79fc9a-702a-45a6-9537-69ccbce65a46'
   imageRepository: 'weighttracker'
@@ -26,11 +27,10 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   isFeature: $[contains(variables['Build.SourceBranch'], 'feature')]
-
+  
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
-
-- group: ${{parameters.TARGET_ENV}}
+  group: ${{parameters.TARGET_ENV}}
 
 stages:
 - stage: BuildStart
@@ -73,11 +73,10 @@ stages:
           latest
           $(tag) 
 
-stages:
-- stage: 'Deploy'
-  displayName: 'Deploy Weight Tracker App'
+- stage: 'StageDeploy'
+  displayName: 'Deploy to Stage'
   jobs:
-  - template: templates/rolling-release-docker-template.yml
+  - template: pipelines/templates/rolling-release-docker-template.yml
     parameters:
       TARGET_ENV: ${{parameters.TARGET_ENV}}
       APP_NAME: $(APP_NAME)
