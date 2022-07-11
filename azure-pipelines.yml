@@ -6,9 +6,6 @@ trigger:
 - master
 - feature/*
 
-resources:
-- repo: self
-
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'df79fc9a-702a-45a6-9537-69ccbce65a46'
