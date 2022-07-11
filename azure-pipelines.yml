@@ -29,7 +29,7 @@ stages:
       - script: echo Hello Build Start ${{variables['Build.SourceBranch']}}!
 
 - stage: Build
-  condition: and(succeeded(), eq(variables.isFeature, true))
+ # condition: and(succeeded(), eq(variables.isFeature, true))
   displayName: Build feature branch
   jobs:
   - job: Build
@@ -42,3 +42,22 @@ stages:
         containerRegistry: 'bootcampdockercr'
         command: 'build'
         Dockerfile: '**/Dockerfile'
+
+- stage: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest
+          $(tag) 
