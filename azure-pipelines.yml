@@ -25,11 +25,11 @@ stages:
     steps:
       - script: echo Hello Build Start ${{variables['Build.SourceBranch']}}!
 
-- stage: Build
+- stage: BuildCI
  # condition: and(succeeded(), eq(variables.isFeature, true))
   displayName: Build feature branch
   jobs:
-  - job: Build
+  - job: BuildI
     displayName: Build Feature
     pool:
       vmImage: $(vmImageName)
@@ -40,12 +40,12 @@ stages:
         command: 'build'
         Dockerfile: '**/Dockerfile'
 
-- stage: Build
+- stage: BuildAndPush
   condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
   displayName: Build and push stage
   jobs:
-  - job: Build
-    displayName: Build
+  - job: BuildAndPush
+    displayName: Build and Push to CR
     
     steps:
     - task: Docker@2
