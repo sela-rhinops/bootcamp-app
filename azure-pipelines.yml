@@ -16,12 +16,20 @@ variables:
   containerRegistry: 'bootcampdockercr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
+  isFeature: $[contains(variables['Build.SourceBranch'], 'feature')]
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
+- stage: BuildStart
+  jobs:
+  - job: BuildStart
+    steps:
+      - script: echo Hello Build Start!
+
 - stage: Build
+  condition: and(succeeded(), eq(variables.isFeature, true))
   displayName: Build feature branch
   jobs:
   - job: Build
