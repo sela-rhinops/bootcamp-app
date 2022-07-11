@@ -74,10 +74,10 @@ stages:
           $(tag) 
 
 stages:
-- stage: 'Deploy'
-  displayName: 'Deploy Weight Tracker App'
+- stage: 'StageDeploy'
+  displayName: 'Deploy to Stage'
   jobs:
-  - template: templates/rolling-release-docker-template.yml
+  - template: pipelines/templates/rolling-release-docker-template.yml
     parameters:
       TARGET_ENV: ${{parameters.TARGET_ENV}}
       APP_NAME: $(APP_NAME)
