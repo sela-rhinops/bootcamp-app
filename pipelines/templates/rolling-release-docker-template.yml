@@ -1,8 +1,6 @@
 parameters:
   - name: TARGET_ENV
   
-  - name: APP_NAME
-
 jobs:
 - deployment: 'DeployTo${{parameters.TARGET_ENV}}'
   displayName: 'Deploy Weight Tracker App to ${{parameters.TARGET_ENV}} environment'
@@ -16,15 +14,15 @@ jobs:
       deploy:
         steps:
       
-        # - task: SSH@0
+        # - task: Bash@3
         #   displayName: Download latest docker image form ACR
         #   inputs:
         #     targetType: 'inline'
         #     script: 'docker pull bootcampdockercr.azurecr.io/weighttracker:latest'
         
-        - task: SSH@0
+        - task: Bash@3
           displayName: Docker run
           inputs:
             targetType: 'inline'
-            script: 'docker run -d  -p 8080:8080 --name wt-001 --mount type=bind,source=/mount/data/.env,target=/home/weight-tracker/.env  bootcampdockercr.azurecr.io/weighttracker:latest'
+            script: 'docker run -d -p 8080:8080 --name wt-app --mount type=bind,source=/mount/data/.env,target=/home/weight-tracker/.env  bootcampdockercr.azurecr.io/weighttracker:latest'
  
