@@ -1,6 +1,6 @@
 "use strict";
 
-//CI Test
+//CI Docker Test
 const dotenv = require( "dotenv" );
 const createServer = require( "./server" ).createServer;
 
