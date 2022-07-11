@@ -3,8 +3,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
-- feature/*
+  batch: true
+  branches:
+    include:
+    - master
+    - feature/*
 
 resources:
 - repo: self
