@@ -9,6 +9,15 @@ trigger:
     - master
     - feature/*
 
+parameters:
+  - name: TARGET_ENV
+    default: "stage"
+    displayName: "Select Target Env For release"
+    type: string  
+    values:
+    - 'stage'
+    - 'prod'
+
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'df79fc9a-702a-45a6-9537-69ccbce65a46'
@@ -20,6 +29,8 @@ variables:
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+
+- group: ${{parameters.TARGET_ENV}}
 
 stages:
 - stage: BuildStart
@@ -61,3 +72,12 @@ stages:
         tags: |
           latest
           $(tag) 
+
+stages:
+- stage: 'Deploy'
+  displayName: 'Deploy Weight Tracker App'
+  jobs:
+  - template: templates/rolling-release-docker-template.yml
+    parameters:
+      TARGET_ENV: ${{parameters.TARGET_ENV}}
+      APP_NAME: $(APP_NAME)
