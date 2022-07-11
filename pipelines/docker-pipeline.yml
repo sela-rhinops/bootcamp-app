@@ -25,7 +25,7 @@ stages:
   condition: eq(variables['build.sourceBranch'], 'refs/heads/feature.')
   displayName: Build feature branch
   jobs:
-  - job: Build Feature
+  - job: Build
     displayName: Build Feature
     pool:
       vmImage: $(vmImageName)
