@@ -26,7 +26,7 @@ stages:
   jobs:
   - job: BuildStart
     steps:
-      - script: echo Hello Build Start!
+      - script: echo Hello Build Start ${{variables['Build.SourceBranch']}}!
 
 - stage: Build
   condition: and(succeeded(), eq(variables.isFeature, true))
