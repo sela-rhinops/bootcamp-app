@@ -73,7 +73,6 @@ stages:
           latest
           $(tag) 
 
-stages:
 - stage: 'StageDeploy'
   displayName: 'Deploy to Stage'
   jobs:
