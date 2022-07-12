@@ -73,8 +73,8 @@ stages:
           latest
           $(tag) 
 
-- stage: 'StageDeploy'
-  displayName: 'Deploy to Stage'
+- stage: 'DockerDeploy'
+  displayName: 'Docker Deploy Weight Tracker App'
   jobs:
   - template: pipelines/templates/rolling-release-docker-template.yml
     parameters:
