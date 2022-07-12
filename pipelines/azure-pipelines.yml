@@ -1,0 +1,60 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+parameters:
+  - name: TARGET_ENV
+    default: "stage"
+    displayName: "Select Target Env For release"
+    type: string  
+    values:
+    - 'stage'
+    - 'prod'
+
+variables:
+- group: ${{parameters.TARGET_ENV}}
+
+stages:
+- stage: 'Build'
+  displayName: 'Build App - Weight Tracker App - ${{parameters.TARGET_ENV}}'
+
+  jobs:
+  - job: 'Build'
+    displayName: 'Build Job'
+  
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - script: |
+        echo selected target : Selected environment : ${{parameters.TARGET_ENV}}
+
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: '14.x'
+      
+    - task: Npm@1
+      displayName: 'Update application version'
+      inputs:
+        command: 'custom'
+        customCommand: 'version  1.1.$(build.buildid) --no-git-tag-version'
+        customRegistry: 'useFeed'
+        customFeed: 'b1cb2c79-6494-4aae-9934-2fc8f4c2046f/94a83a3b-7d49-45d7-8a5a-4edaaebb6c3f'
+    
+    - task: Npm@1
+      displayName: 'npm install : install app dependencies'
+      inputs:
+        verbose: true
+        customRegistry: useFeed
+        customFeed: '377c275b-adfb-4840-a04a-81ca566f4829/4f65c0b9-ec79-4b16-9c7e-868528a0dc13'
+      
+    - task: Npm@1
+      displayName: 'npm publish : publish to Artifactory'
+      inputs:
+        command: publish
+        verbose: false
+        publishRegistry: useFeed
+        publishFeed: '377c275b-adfb-4840-a04a-81ca566f4829/4f65c0b9-ec79-4b16-9c7e-868528a0dc13'

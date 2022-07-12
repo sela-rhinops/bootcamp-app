@@ -1,0 +1,82 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - feature/*
+
+parameters:
+  - name: TARGET_ENV
+    default: "stage"
+    displayName: "Select Target Env For release"
+    type: string  
+    values:
+    - 'stage'
+    - 'prod'
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'df79fc9a-702a-45a6-9537-69ccbce65a46'
+  imageRepository: 'weighttracker'
+  containerRegistry: 'bootcampdockercr.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  isFeature: $[contains(variables['Build.SourceBranch'], 'feature')]
+  
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  group: ${{parameters.TARGET_ENV}}
+
+stages:
+- stage: BuildStart
+  jobs:
+  - job: BuildStart
+    steps:
+      - script: echo Hello Build Start ${{variables['Build.SourceBranch']}}!
+
+- stage: BuildCI
+ # condition: and(succeeded(), eq(variables.isFeature, true))
+  displayName: Build feature branch
+  jobs:
+  - job: BuildI
+    displayName: Build Feature
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'bootcampdockercr'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+
+- stage: BuildAndPush
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+  displayName: Build and push stage
+  jobs:
+  - job: BuildAndPush
+    displayName: Build and Push to CR
+    
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest
+          $(tag) 
+
+- stage: 'DockerDeploy'
+  displayName: 'Docker Deploy Weight Tracker App'
+  jobs:
+  - template: pipelines/templates/rolling-release-docker-template.yml
+    parameters:
+      TARGET_ENV: ${{parameters.TARGET_ENV}}
+      APP_NAME: $(APP_NAME)
