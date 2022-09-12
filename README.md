@@ -1,5 +1,15 @@
 # Node.js Weight Tracker
 
+<a href="https://www.youtube.com/watch?v=CbTpxKKyyNg" target="_blank">
+Come see a short video describing this project :
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/9Jt0LIvXOAE/0.jpg)](https://www.youtube.com/watch?v=9Jt0LIvXOAE" "Portfolio video #2 - the weightapp tracker p1 - manual build on azure cloud
+
+")
+
+</a>
+<br/>
+
 ![Demo](docs/build-weight-tracker-app-demo.gif)
 
 This sample application demonstrates the following technologies.
